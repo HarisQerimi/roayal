@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Royal Hookah Bar - Meni</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('Background_Royal.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            max-width: 300px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .category {
+            margin-bottom: 3rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .category h2 {
+            background: linear-gradient(135deg, #00f0ff, #ff00f7);
+            color: white;
+            padding: 1.5rem 2rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .items-container {
+            padding: 1.5rem;
+        }
+
+        .item {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .item-price {
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #00f0ff, #ff00f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00f0ff;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+
+       @keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.logo {
+    max-width: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header fade-in">
+            <img src="Logo.png" alt="Royal Hookah Bar Logo" class="logo" />
+        </div>
+
+    <script>
+        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSKZwXV_ssIhwgDDTxmUy0hdjtXE0rWb0UFVyP7XQTnu7-YA3_NA4Ov2ri_MGKH4EBLUUecpNmSI_Az/pub?output=csv';
+
+        async function fetchMenuData() {
+            try {
+                const response = await fetch(sheetURL);
+                const text = await response.text();
+                const parsed = Papa.parse(text, { header: true });
+                return parsed.data.filter(row => row.Item && row.Item.trim() !== '');
+            } catch (error) {
+                console.error('Greška pri učitavanju menija:', error);
+                return [];
+            }
+        }
+
+        function renderMenu(menuItems) {
+            const container = document.getElementById('menu');
+
+            if (menuItems.length === 0) {
+                container.innerHTML = '<div class="loading">Greška pri učitavanju menija. Molimo pokušajte ponovo.</div>';
+                return;
+            }
+
+            const grouped = {};
+            menuItems.forEach(item => {
+                const category = item.Category || 'Ostalo';
+                if (!grouped[category]) grouped[category] = [];
+                grouped[category].push(item);
+            });
+
+            container.innerHTML = '';
+            for (const category in grouped) {
+                const section = document.createElement('div');
+                section.className = 'category';
+
+                const categoryHeader = document.createElement('h2');
+                categoryHeader.textContent = category;
+                section.appendChild(categoryHeader);
+
+                const itemsContainer = document.createElement('div');
+                itemsContainer.className = 'items-container';
+
+                grouped[category].forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'item';
+
+                    const itemHeader = document.createElement('div');
+                    itemHeader.className = 'item-header';
+
+                    const itemName = document.createElement('span');
+                    itemName.className = 'item-name';
+                    itemName.textContent = item.Item;
+
+                    const itemPrice = document.createElement('span');
+                    itemPrice.className = 'item-price';
+                    itemPrice.textContent = item.Price_KM + ' KM';
+
+                    itemHeader.appendChild(itemName);
+                    itemHeader.appendChild(itemPrice);
+                    itemDiv.appendChild(itemHeader);
+                    itemsContainer.appendChild(itemDiv);
+                });
+
+                section.appendChild(itemsContainer);
+                container.appendChild(section);
+            }
+        }
+
+        fetchMenuData().then(renderMenu);
+    </script>
+</body>
+</html>
