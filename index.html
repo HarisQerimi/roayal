@@ -129,103 +129,103 @@
             margin-bottom: 1rem;
         }
 
-       @keyframes spin {
-    to { transform: rotate(360deg); }
-}
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
-.logo {
-    max-width: 300px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-}
-</style>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+        .logo {
+            max-width: 300px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
     <div class="container">
-            <div class="header fade-in">
-        <img src="Logo.png" alt="Royal Hookah Bar Logo" class="logo" />
-    </div>
-
-    <div id="menu">
-        <div class="loading">
-            <div class="spinner"></div><br>
-            Učitavam meni...
+        <div class="header fade-in">
+            <img src="Logo.png" alt="Royal Hookah Bar Logo" class="logo" />
         </div>
-    </div>
 
-    <script>
+        <div id="menu">
+            <div class="loading">
+                <div class="spinner"></div><br>
+                Učitavam meni...
+            </div>
+        </div>
 
-const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSKZwXV_ssIhwgDDTxmUy0hdjtXE0rWb0UFVyP7XQTnu7-YA3_NA4Ov2ri_MGKH4EBLUUecpNmSI_Az/pub?output=csv';
+        <script>
+            const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSKZwXV_ssIhwgDDTxmUy0hdjtXE0rWb0UFVyP7XQTnu7-YA3_NA4Ov2ri_MGKH4EBLUUecpNmSI_Az/pub?output=csv';
 
-        async function fetchMenuData() {
-            try {
-                const response = await fetch(sheetURL);
-                const text = await response.text();
-                const parsed = Papa.parse(text, { header: true });
-                return parsed.data.filter(row => row.Item && row.Item.trim() !== '');
-            } catch (error) {
-                console.error('Greška pri učitavanju menija:', error);
-                return [];
-            }
-        }
-
-        function renderMenu(menuItems) {
-            const container = document.getElementById('menu');
-
-            if (menuItems.length === 0) {
-                container.innerHTML = '<div class="loading">Greška pri učitavanju menija. Molimo pokušajte ponovo.</div>';
-                return;
+            async function fetchMenuData() {
+                try {
+                    const response = await fetch(sheetURL);
+                    const text = await response.text();
+                    const parsed = Papa.parse(text, { header: true });
+                    return parsed.data.filter(row => row.Item && row.Item.trim() !== '');
+                } catch (error) {
+                    console.error('Greška pri učitavanju menija:', error);
+                    return [];
+                }
             }
 
-            const grouped = {};
-            menuItems.forEach(item => {
-                const category = item.Category || 'Ostalo';
-                if (!grouped[category]) grouped[category] = [];
-                grouped[category].push(item);
-            });
+            function renderMenu(menuItems) {
+                const container = document.getElementById('menu');
 
-            container.innerHTML = '';
-            for (const category in grouped) {
-                const section = document.createElement('div');
-                section.className = 'category';
+                if (menuItems.length === 0) {
+                    container.innerHTML = '<div class="loading">Greška pri učitavanju menija. Molimo pokušajte ponovo.</div>';
+                    return;
+                }
 
-                const categoryHeader = document.createElement('h2');
-                categoryHeader.textContent = category;
-                section.appendChild(categoryHeader);
-
-                const itemsContainer = document.createElement('div');
-                itemsContainer.className = 'items-container';
-
-                grouped[category].forEach(item => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'item';
-
-                    const itemHeader = document.createElement('div');
-                    itemHeader.className = 'item-header';
-
-                    const itemName = document.createElement('span');
-                    itemName.className = 'item-name';
-                    itemName.textContent = item.Item;
-
-                    const itemPrice = document.createElement('span');
-                    itemPrice.className = 'item-price';
-                    itemPrice.textContent = item.Price_KM + ' KM';
-
-                    itemHeader.appendChild(itemName);
-                    itemHeader.appendChild(itemPrice);
-                    itemDiv.appendChild(itemHeader);
-                    itemsContainer.appendChild(itemDiv);
+                const grouped = {};
+                menuItems.forEach(item => {
+                    const category = item.Category || 'Ostalo';
+                    if (!grouped[category]) grouped[category] = [];
+                    grouped[category].push(item);
                 });
 
-                section.appendChild(itemsContainer);
-                container.appendChild(section);
-            }
-        }
+                container.innerHTML = '';
+                for (const category in grouped) {
+                    const section = document.createElement('div');
+                    section.className = 'category';
 
-        fetchMenuData().then(renderMenu);
-    </script>
+                    const categoryHeader = document.createElement('h2');
+                    categoryHeader.textContent = category;
+                    section.appendChild(categoryHeader);
+
+                    const itemsContainer = document.createElement('div');
+                    itemsContainer.className = 'items-container';
+
+                    grouped[category].forEach(item => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'item';
+
+                        const itemHeader = document.createElement('div');
+                        itemHeader.className = 'item-header';
+
+                        const itemName = document.createElement('span');
+                        itemName.className = 'item-name';
+                        itemName.textContent = item.Item;
+
+                        const itemPrice = document.createElement('span');
+                        itemPrice.className = 'item-price';
+                        itemPrice.textContent = item.Price_KM + ' KM';
+
+                        itemHeader.appendChild(itemName);
+                        itemHeader.appendChild(itemPrice);
+                        itemDiv.appendChild(itemHeader);
+                        itemsContainer.appendChild(itemDiv);
+                    });
+
+                    section.appendChild(itemsContainer);
+                    container.appendChild(section);
+                }
+            }
+
+            fetchMenuData().then(renderMenu);
+        </script>
+    </div>
 </body>
 </html>
