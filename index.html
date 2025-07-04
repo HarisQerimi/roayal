@@ -17,28 +17,56 @@
             font-family: 'Inter', sans-serif;
             background: url('Background_Royal.jpg') no-repeat center center fixed;
             background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
+        /* Mobile-specific background fix */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
             position: relative;
             z-index: 1;
         }
 
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+        }
+
         .header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
             border-radius: 25px;
-            padding: 3rem 2rem;
+            padding: 2rem 1rem;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile header optimization */
+        @media (max-width: 768px) {
+            .header {
+                margin-bottom: 1rem;
+                padding: 1.5rem 1rem;
+                border-radius: 20px;
+            }
         }
 
         .logo {
@@ -48,7 +76,7 @@
         }
 
         .category {
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(20px);
             border-radius: 20px;
@@ -56,6 +84,14 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Mobile category optimization */
+        @media (max-width: 768px) {
+            .category {
+                margin-bottom: 1.5rem;
+                border-radius: 15px;
+            }
         }
 
         .category:hover {
@@ -75,14 +111,36 @@
             overflow: hidden;
         }
 
+        /* Mobile category header optimization */
+        @media (max-width: 768px) {
+            .category h2 {
+                padding: 1rem 1.5rem;
+                font-size: 1.5rem;
+            }
+        }
+
         .items-container {
             padding: 1.5rem;
+        }
+
+        /* Mobile items container optimization */
+        @media (max-width: 768px) {
+            .items-container {
+                padding: 1rem;
+            }
         }
 
         .item {
             padding: 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
+        }
+
+        /* Mobile item optimization */
+        @media (max-width: 768px) {
+            .item {
+                padding: 1rem;
+            }
         }
 
         .item:last-child {
@@ -93,12 +151,30 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            gap: 1rem;
+        }
+
+        /* Mobile item header optimization */
+        @media (max-width: 768px) {
+            .item-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
         }
 
         .item-name {
             font-weight: 600;
             font-size: 1.1rem;
             color: #fff;
+            flex: 1;
+        }
+
+        /* Mobile item name optimization */
+        @media (max-width: 768px) {
+            .item-name {
+                font-size: 1rem;
+            }
         }
 
         .item-price {
@@ -108,6 +184,14 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            white-space: nowrap;
+        }
+
+        /* Mobile item price optimization */
+        @media (max-width: 768px) {
+            .item-price {
+                font-size: 1.1rem;
+            }
         }
 
         .loading {
@@ -134,10 +218,18 @@
 
         .logo {
             max-width: 300px;
+            width: 100%;
+            height: auto;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
             text-align: center;
+        }
+
+        /* Mobile logo optimization */
+        @media (max-width: 768px) {
+            .logo {
+                max-width: 250px;
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
